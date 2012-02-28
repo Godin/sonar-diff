@@ -86,6 +86,9 @@ public class DiffTest {
     assertThat(r.get(0), is(new Edit(Type.MOVE, 0, 1, 0, 1)));
   }
 
+  /**
+   * This is important special case, for which other algorithms can not detect movement.
+   */
   @Test
   public void move() {
     List<Edit> r = diff(t("Abc"), t("bcA"));
@@ -95,7 +98,7 @@ public class DiffTest {
   }
 
   private List<Edit> diff(Text a, Text b) {
-    return new DiffAlgorithm().diff(a, b);
+    return new DiffAlgorithm().diff(a, b, TextComparator.DEFAULT);
   }
 
   public static Text t(String text) {

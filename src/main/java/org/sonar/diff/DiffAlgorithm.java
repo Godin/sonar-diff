@@ -20,15 +20,14 @@ public class DiffAlgorithm {
     try {
       Text a = new Text(Files.toByteArray(new File(args[0])));
       Text b = new Text(Files.toByteArray(new File(args[1])));
-      List<Edit> r = new DiffAlgorithm().diff(a, b);
+      List<Edit> r = new DiffAlgorithm().diff(a, b, TextComparator.IGNORE_WHITESPACE);
       System.out.println(r);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  public List<Edit> diff(Text a, Text b) {
-    TextComparator cmp = new TextComparator();
+  public List<Edit> diff(Text a, Text b, TextComparator cmp) {
     return diff(wrap(a, cmp), wrap(b, cmp), cmp);
   }
 
