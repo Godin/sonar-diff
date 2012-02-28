@@ -21,7 +21,9 @@ public class DiffAlgorithm {
       Text a = new Text(Files.toByteArray(new File(args[0])));
       Text b = new Text(Files.toByteArray(new File(args[1])));
       List<Edit> r = new DiffAlgorithm().diff(a, b, TextComparator.IGNORE_WHITESPACE);
-      System.out.println(r);
+      for (Edit edit : r) {
+        System.out.println(edit);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -55,7 +57,7 @@ public class DiffAlgorithm {
       int p = 0;
       int pCur = 0;
 
-      while (pCur < m) {
+      while ((pCur + l < m) && (q + l < n)) {
         int lCur = 0;
         while ((pCur + lCur < m) && (q + lCur < n)
           && (comparator.equals(s, pCur + lCur, t, q + lCur))) {
@@ -71,6 +73,7 @@ public class DiffAlgorithm {
       if (l > 0) {
         Edit edit = new Edit(Edit.Type.MOVE, p, p + l - 1, q, q + l - 1);
         r.add(edit);
+        lastEdit = edit;
         q += l;
       } else {
         if (lastEdit == null || lastEdit.getType() != Edit.Type.INSERT) {

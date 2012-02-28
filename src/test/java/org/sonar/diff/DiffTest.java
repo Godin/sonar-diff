@@ -97,6 +97,42 @@ public class DiffTest {
     assertThat(r.get(1), is(new Edit(Type.MOVE, 0, 0, 2, 2)));
   }
 
+  @Test
+  public void move2() {
+    List<Edit> r = diff(t("abcd"), t("abcda"));
+    assertThat(r.size(), is(2));
+    assertThat(r.get(0), is(new Edit(Type.MOVE, 0, 3, 0, 3)));
+    assertThat(r.get(1), is(new Edit(Type.MOVE, 0, 0, 4, 4)));
+  }
+
+  @Test
+  public void move3() {
+    List<Edit> r = diff(t("abcd"), t("bcdaa"));
+    assertThat(r.size(), is(3));
+    assertThat(r.get(0), is(new Edit(Type.MOVE, 1, 3, 0, 2)));
+    assertThat(r.get(1), is(new Edit(Type.MOVE, 0, 0, 3, 3)));
+    assertThat(r.get(2), is(new Edit(Type.MOVE, 0, 0, 4, 4)));
+  }
+
+  @Test
+  public void severalInserts() {
+    List<Edit> r = diff(t("ac"), t("aBcD"));
+    assertThat(r.size(), is(4));
+    assertThat(r.get(0), is(new Edit(Type.MOVE, 0, 0, 0, 0)));
+    assertThat(r.get(1), is(new Edit(Type.INSERT, -1, -1, 1, 1)));
+    assertThat(r.get(2), is(new Edit(Type.MOVE, 1, 1, 2, 2)));
+    assertThat(r.get(3), is(new Edit(Type.INSERT, -1, -1, 3, 3)));
+  }
+
+  @Test
+  public void insertSeveralLines() {
+    List<Edit> r = diff(t("ade"), t("aBCde"));
+    assertThat(r.size(), is(3));
+    assertThat(r.get(0), is(new Edit(Type.MOVE, 0, 0, 0, 0)));
+    assertThat(r.get(1), is(new Edit(Type.INSERT, -1, -1, 1, 2)));
+    assertThat(r.get(2), is(new Edit(Type.MOVE, 1, 2, 3, 4)));
+  }
+
   private List<Edit> diff(Text a, Text b) {
     return new DiffAlgorithm().diff(a, b, TextComparator.DEFAULT);
   }
