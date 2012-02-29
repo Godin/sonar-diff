@@ -11,10 +11,19 @@ import static org.junit.Assert.assertThat;
 public class DiffFunctionalTest {
 
   @Test
+  public void example0() throws Exception {
+    CodeChurn r = diff("example0");
+    assertThat(r.getAdded(), is(3));
+    assertThat(r.getDeleted(), is(0));
+    assertThat(r.getDiff().size(), is(8));
+  }
+
+  @Test
   public void example1() throws Exception {
     CodeChurn r = diff("example1");
     assertThat(r.getAdded(), is(2));
     assertThat(r.getDeleted(), is(1));
+    assertThat(r.getDiff().size(), is(4));
   }
 
   private CodeChurn diff(String name) throws IOException {
